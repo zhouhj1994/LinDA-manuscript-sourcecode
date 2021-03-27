@@ -1,0 +1,13 @@
+##NECESSARY JOB SPECIFICATIONS
+#BSUB -J ExampleJob1         #Set the job name to "ExampleJob1"
+#BSUB -L /bin/bash           #Uses the bash login shell to initialize the job's execution environment.
+#BSUB -W 2:00             #Set the wall clock limit to ...hr
+#BSUB -n 20             #Request ... core
+#BSUB -R "span[ptile=20]"     #Request ... core per node.
+#BSUB -R "rusage[mem=2500]"  #Request ...MB per process (CPU) for the job
+#BSUB -o Example1Out.%J      #Send stdout and stderr to "Example1Out.[jobID]"
+
+#First Executable Line
+
+module load R_tamu/4.0.3-foss-2020a-recommended-mt
+Rscript S72C0.R

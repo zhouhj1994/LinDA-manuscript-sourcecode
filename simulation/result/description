@@ -1,0 +1,11 @@
+1. There are 10 columns in output_S0C0.txt (and other txt files with 10 columns)representing methods:
+
+LinDA, ANCOM-BC (disabling zero treatment), ANCOM-BC-2 (enabling zero treatment), ALDEx2, DESeq2, EdgeR, MetagenomeSeq, MetagenomeSeq-2, Wilcoxon-Spearman (GMPR normalization), Wilcoxon-Spearman-2 (relative abundance).
+
+2. There are 3 columns in output_S0C0LinDA.txt and output_S6C0LinDA.txt representing LinDA method with different zero handling approaches:
+
+Adaptive, Pseudo-count, imputation.
+
+3. There are 4 columns in output_S71C0.txt and output_S72C0.txt representing:
+
+LinDA-OLS, CLR+OLS, LinDA-LMM, CLR+LMM.

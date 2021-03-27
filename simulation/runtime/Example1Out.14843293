@@ -1,0 +1,290 @@
+Loading required package: zCompositions
+Loading required package: MASS
+Loading required package: NADA
+Loading required package: survival
+
+Attaching package: 'NADA'
+
+The following object is masked from 'package:stats':
+
+    cor
+
+Loading required package: truncnorm
+Loading required package: S4Vectors
+Loading required package: stats4
+Loading required package: BiocGenerics
+Loading required package: parallel
+
+Attaching package: 'BiocGenerics'
+
+The following objects are masked from 'package:parallel':
+
+    clusterApply, clusterApplyLB, clusterCall, clusterEvalQ,
+    clusterExport, clusterMap, parApply, parCapply, parLapply,
+    parLapplyLB, parRapply, parSapply, parSapplyLB
+
+The following object is masked from 'package:NADA':
+
+    sd
+
+The following objects are masked from 'package:stats':
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from 'package:base':
+
+    Filter, Find, Map, Position, Reduce, anyDuplicated, append,
+    as.data.frame, basename, cbind, colnames, dirname, do.call,
+    duplicated, eval, evalq, get, grep, grepl, intersect, is.unsorted,
+    lapply, mapply, match, mget, order, paste, pmax, pmax.int, pmin,
+    pmin.int, rank, rbind, rownames, sapply, setdiff, sort, table,
+    tapply, union, unique, unsplit, which.max, which.min
+
+
+Attaching package: 'S4Vectors'
+
+The following object is masked from 'package:base':
+
+    expand.grid
+
+Loading required package: IRanges
+
+Attaching package: 'IRanges'
+
+The following object is masked from 'package:phyloseq':
+
+    distance
+
+Loading required package: GenomicRanges
+Loading required package: GenomeInfoDb
+Loading required package: SummarizedExperiment
+Loading required package: MatrixGenerics
+Loading required package: matrixStats
+
+Attaching package: 'MatrixGenerics'
+
+The following objects are masked from 'package:matrixStats':
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars
+
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+
+Attaching package: 'Biobase'
+
+The following object is masked from 'package:MatrixGenerics':
+
+    rowMedians
+
+The following objects are masked from 'package:matrixStats':
+
+    anyMissing, rowMedians
+
+The following object is masked from 'package:phyloseq':
+
+    sampleNames
+
+Loading required package: limma
+
+Attaching package: 'limma'
+
+The following object is masked from 'package:DESeq2':
+
+    plotMA
+
+The following object is masked from 'package:BiocGenerics':
+
+    plotMA
+
+Loading required package: glmnet
+Loading required package: Matrix
+
+Attaching package: 'Matrix'
+
+The following object is masked from 'package:S4Vectors':
+
+    expand
+
+Loaded glmnet 4.0-2
+Loading required package: RColorBrewer
+
+Attaching package: 'metagenomeSeq'
+
+The following object is masked from 'package:edgeR':
+
+    calcNormFactors
+
+Registered S3 method overwritten by 'rmutil':
+  method         from
+  print.response httr
+67.7 GB
+$vendor_id
+[1] "GenuineIntel"
+
+$model_name
+[1] "Intel(R) Xeon(R) CPU E5-2670 v2 @ 2.50GHz"
+
+$no_of_cores
+[1] 20
+
+   user  system elapsed 
+  0.430   0.008   0.454 
+[1] 0.0625
+[1] 0.5
+   user  system elapsed 
+ 21.696   0.112  21.835 
+[1] 0
+[1] 0.5333333
+   user  system elapsed 
+  0.219   0.000   0.218 
+[1] 0.03571429
+[1] 0.9
+   user  system elapsed 
+ 22.038   0.028  22.057 
+[1] 0.03571429
+[1] 0.9
+   user  system elapsed 
+  0.206   0.000   0.206 
+[1] 0.05263158
+[1] 0.6
+   user  system elapsed 
+ 64.529   0.015  64.519 
+[1] 0
+[1] 0.6333333
+   user  system elapsed 
+  6.734   0.111   6.844 
+[1] 0.04545455
+[1] 0.9130435
+   user  system elapsed 
+160.529   1.757 162.218 
+[1] 0.04545455
+[1] 0.9130435
+   user  system elapsed 
+  4.036   0.009   4.043 
+[1] 0.04347826
+[1] 0.9565217
+   user  system elapsed 
+162.291   1.330 163.552 
+[1] 0
+[1] 0.9565217
+   user  system elapsed 
+  4.998   0.078   5.073 
+[1] 0
+[1] 0.9565217
+   user  system elapsed 
+215.697   0.956 216.564 
+[1] 0.04545455
+[1] 0.9130435
+   user  system elapsed 
+  1.595   0.002   1.598 
+[1] 0.030837
+[1] 0.9401709
+   user  system elapsed 
+185.014   0.034 184.972 
+[1] 0.02620087
+[1] 0.9529915
+   user  system elapsed 
+  1.608   0.000   1.607 
+[1] 0.02941176
+[1] 0.9871795
+   user  system elapsed 
+162.641   0.039 162.611 
+[1] 0.01293103
+[1] 0.9786325
+   user  system elapsed 
+  1.616   0.000   1.615 
+[1] 0.02392344
+[1] 0.8717949
+   user  system elapsed 
+600.112   0.119 599.985 
+[1] 0.01913876
+[1] 0.8760684
+   user  system elapsed 
+ 25.317   2.947  28.253 
+[1] 0.0546875
+[1] 0.9837398
+    user   system  elapsed 
+4603.628  533.304 5135.393 
+[1] 0.02811245
+[1] 0.9837398
+   user  system elapsed 
+ 14.394   0.927  15.314 
+[1] 0.1066176
+[1] 0.9878049
+    user   system  elapsed 
+4601.111  557.999 5157.148 
+[1] 0.1131387
+[1] 0.9878049
+   user  system elapsed 
+ 14.758   0.742  15.494 
+[1] 0.05447471
+[1] 0.9878049
+    user   system  elapsed 
+4925.531  583.219 5506.353 
+[1] 0.04330709
+[1] 0.9878049
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@gpu64-3010>
+Subject: Job 14843293: <ExampleJob1> in cluster <Main_Compute> Done
+
+Job <ExampleJob1> was submitted from host <login1> by user <zhouhuijuan> in cluster <Main_Compute>.
+Job was executed on host(s) <gpu64-3010>, in queue <sn_regular>, as user <zhouhuijuan> in cluster <Main_Compute>.
+</home/zhouhuijuan> was used as the home directory.
+</scratch/user/zhouhuijuan/LinDA/simulation/runtime> was used as the working directory.
+Started at Thu Mar 18 21:56:06 2021
+Results reported on Fri Mar 19 02:49:34 2021
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+##NECESSARY JOB SPECIFICATIONS
+#BSUB -J ExampleJob1         #Set the job name to "ExampleJob1"
+#BSUB -L /bin/bash           #Uses the bash login shell to initialize the job's execution environment.
+#BSUB -W 12:00             #Set the wall clock limit to ...hr
+#BSUB -n 1             #Request ... core
+#BSUB -R "span[ptile=1]"     #Request ... core per node.
+#BSUB -R "rusage[mem=54000]"  #Request ...MB per process (CPU) for the job
+#BSUB -o Example1Out.%J      #Send stdout and stderr to "Example1Out.[jobID]"
+
+#First Executable Line
+
+module load R_tamu/4.0.3-foss-2020a-recommended-mt
+Rscript runtime.R
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   19320.73 sec.
+    Max Memory :                                 23634 MB
+    Average Memory :                             14345.70 MB
+    Total Requested Memory :                     54000.00 MB
+    Delta Memory :                               30366.00 MB
+    Max Swap :                                   2 MB
+    Max Processes :                              5
+    Max Threads :                                6
+
+The output (if any) is above this job summary.
+
