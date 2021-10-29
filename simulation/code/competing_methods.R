@@ -210,3 +210,22 @@ wilco.spear.fun2 <- function(otu.tab, meta, formula, alpha) {
   rej <- which(qval <= alpha)
   return(rej)
 }
+
+library(Maaslin2)
+maaslin2.fun <- function(otu.tab, meta, fix.eff, rand.eff, alpha) {
+  res <- Maaslin2(
+    input_data = otu.tab,
+    input_metadata = meta,
+    output = "masslin2", 
+    min_prevalence = 0,
+    fixed_effects = fix.eff,
+    random_effects = rand.eff,
+    plot_heatmap = FALSE,
+    plot_scatter = FALSE)
+  ind <- which(res$results$metadata == fix.eff[1])
+  ord <- match(rownames(otu.tab), res$results$feature[ind])
+  pval <- res$results$pval[ind][ord]
+  qval <- p.adjust(pval, method = 'BH')
+  rej <- which(qval <= alpha)
+  return(rej)
+}

@@ -176,3 +176,66 @@ for(i in 1 : 4) {
                        width = width, height = height)
 }
 
+################################################################## Add
+library(UpSetR);require(ggplot2); require(plyr); require(gridExtra); require(grid);
+pval.mat.list <- readRDS("pval.mat.list.rds")
+fun <- function(pval.mat) {
+  n.met <- ncol(pval.mat)
+  qval.mat <- sapply(1 : n.met, function(i) 
+    p.adjust(pval.mat[, i], method = 'BH'))
+  venn.list <- sapply(1 : n.met, function (i) 
+    which(qval.mat[, i] <= cutoff))
+  otu.all <- unique(names(unlist(venn.list)))
+  upset.df <- data.frame(Name = otu.all)
+  for(i in 1 : n.met) {
+    upset.df[, i + 1] <- otu.all %in% names(venn.list[[i]]) + 0
+  }
+  names(upset.df)[2 : (n.met + 1)] <- method
+  upset.df$Family <- as.vector(fam[match(otu.all, names(fam))])
+  
+  if(filename == 'CDI') {
+    queries = list(list(query = elements, params = list('Family', 'Lachnospiraceae'), active = TRUE),
+                   list(query = elements, params = list('Family', 'Erysipelotrichaceae'), active = TRUE))
+  } else {
+    queries = NULL
+  }
+  pdf(paste0('upset_', filename, '.pdf'), height = 8, width = 11)
+  upset(upset.df, nsets = n.met, mb.ratio = c(0.5, 0.5), sets.x.label = 'Number of Discoveries',
+        order.by = c("freq", "degree"), decreasing = c(TRUE,FALSE), queries = queries)
+  dev.off()
+}
+
+cutoff <- 0.1
+method <- c('LinDA', 'ANCOM-BC', 'ALDEx2', 'MetagenomeSeq', 'Wilcoxon')
+ind <- c(1, 2, 3, 6, 8)
+filename <- 'CDI'
+pval.mat <- pval.mat.list[[1]][, ind]
+load("~/Documents/diff_abundance_analysis/LinDA-manuscript/LinDA-result/realdata/data/CDI.RData")
+fam <- data.obj$otu.name[, 'Family']
+
+
+filename <- 'RA'
+pval.mat <- pval.mat.list[[3]][, ind]
+load("~/Documents/diff_abundance_analysis/LinDA-manuscript/LinDA-result/realdata/data/RA_elife.RData")
+fam <- data.obj$otu.name[, 'Family']
+
+
+method <- c('LinDA', 'ANCOM-BC', 'ALDEx2', 'Wilcoxon')
+ind <- c(1, 2, 3, 8)
+filename <- 'IBD'
+pval.mat <- pval.mat.list[[2]][, ind]
+load("/Users/zhouhuijuan/Documents/diff_abundance_analysis/LinDA-manuscript/LinDA-result/realdata/data/EmilyIBD.RData")
+tax.df <- as.data.frame(tax)
+fam <- tax.df[, 'Family']
+names(fam) <- rownames(tax.df)
+
+
+method <- c('LinDA-LMM(Both)', 'LinDA-OLS(Left)', 'LinDA-OLS(Right)')
+ind <- c(1, 2, 3)
+filename <- 'SMOKE'
+pval.mat <- pval.mat.list[[4]][, ind]
+load("/Users/zhouhuijuan/Documents/diff_abundance_analysis/LinDA-manuscript/LinDA-result/realdata/data/smoker_qiita_full.RData")
+tax.df <- as.data.frame(smokers$tax)
+fam <- tax.df[, 'Family']
+names(fam) <- rownames(tax.df)
+

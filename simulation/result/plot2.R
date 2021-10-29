@@ -34,7 +34,7 @@ fdr.fun <- function(input1, input2, compr.methods,
     facet_grid(factor(sig.density, labels = c("Sparse Signal", "Dense Signal"))
                ~factor(sample.size, labels = sample.size.label)) +
     xlab("Signal Strength") +
-    ylab("False Discovery Proportion") +
+    ylab("Empirical False Discovery Rate") +
     geom_hline(aes(yintercept = 0.05), color = "black", linetype = "dashed") +
     theme_bw(base_size = 18) +
     ggtitle('A') +
@@ -114,6 +114,32 @@ fun <- function(setup) {
                   color.manual, linetype.manual, shape.manual, sample.size.label))
   dev.off()
   pdf(file = paste0(setup, "_fdr.pdf"), width = 11, height = 8)
+  print(fdr.fun(fdr, fdr.sd.1, compr.methods, 
+                color.manual, linetype.manual, shape.manual, sample.size.label))
+  dev.off()
+}
+
+fun <- function(setup) {
+  fdr <- output[, 1 : 10][, ind]
+  power <- output[, 11 : 20][, ind]
+  fdr.sd <- output[, 21 : 30][, ind]
+  power.sd <- output[, 31 : 40][, ind]
+  
+  fdr.sd.1 <- fdr.sd * 1.96 
+  fdr.sd.1[, 2 : ncol(fdr)] <- NA
+  power.sd.1 <- power.sd * 1.96 
+  power.sd.1[, 1 : ncol(fdr)] <- NA
+  
+  # power.fun(power, power.sd.1, compr.methods, 
+  #           color.manual, linetype.manual, shape.manual, sample.size.label)
+  # fdr.fun(fdr, fdr.sd.1, compr.methods, 
+  #         color.manual, linetype.manual, shape.manual, sample.size.label)
+  
+  # pdf(file = paste0(setup, "_power.pdf"), width = 11, height = 8)
+  # print(power.fun(power, power.sd.1, compr.methods, 
+  #                 color.manual, linetype.manual, shape.manual, sample.size.label))
+  # dev.off()
+  pdf(file = paste0(setup, "_fdr_new.pdf"), width = 11, height = 8)
   print(fdr.fun(fdr, fdr.sd.1, compr.methods, 
                 color.manual, linetype.manual, shape.manual, sample.size.label))
   dev.off()

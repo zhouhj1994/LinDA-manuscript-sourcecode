@@ -1,7 +1,7 @@
 simulate.data <- function(m, n, gamma, mu, beta0 = NULL, sigma2 = NULL, eta0 = NULL, 
-                          S1.zero.prop = NULL, 
+                          theta0 = NULL, kappa0 = NULL, S1.zero.prop = NULL, 
                           model = c('S0', 'S1', 'S2', 'S3', 'S4', 'S5', 
-                                    'S6', 'S7.1', 'S7.2'), 
+                                    'S6', 'S7.1', 'S7.2', 'S8'), 
                           case = c('C0', 'C1', 'C2'), strong = FALSE) {
   if (model == 'S4') {
     ind <- sample(1 : 500, m)
@@ -12,9 +12,16 @@ simulate.data <- function(m, n, gamma, mu, beta0 = NULL, sigma2 = NULL, eta0 = N
     X0 <- matrix(exp(rnorm(m * n, beta0, sqrt(sigma2))), nrow = m)
   } else if (model == 'S3'){
     X0 <- matrix(rgamma(m * n, shape = eta0, rate = 1), nrow = m)
+  } else if (model == 'S8') {
+    X0 <- matrix(rnbinom(m * n, size = theta0, mu = exp(kappa0 * 7645)), nrow = m)
   }
   pi0 <- t(t(X0) / colSums(X0))
   pi0.ave <- rowMeans(pi0)
+  if (any(pi0.ave == 0)) {
+    ind <- which(pi0.ave == 0)
+    pi0.ave[ind] <- min(pi0.ave[-ind]) / 10
+    pi0.ave <- pi0.ave / sum(pi0.ave)
+  }
   tmp <- (pi0.ave > 0.005)
   mu <- 2 * mu * (n <= 50) + mu * (n > 50)
   mu.1 <- log(mu * tmp + mu * (0.005 / pi0.ave) ^ (1 / 3) * (1 - tmp))
@@ -96,6 +103,10 @@ simulate.data <- function(m, n, gamma, mu, beta0 = NULL, sigma2 = NULL, eta0 = N
     Sig <- tmp$vectors %*% diag(sqrt(tmp$values)) %*% t(tmp$vectors)
     tmp <- beta %*% t(Z) + beta0
     X <- exp(Sig %*% matrix(rnorm(m * n), nrow = m) + tmp)
+  } else if (model == 'S8') {
+    N <- rnbinom(n, size = 5.3, mu = 7645)
+    X <- exp(kappa0 %*% t(N) + beta %*% t(Z))
+    Y <- matrix(rnbinom(m * n, size = theta0, mu = X), nrow = m)
   }
   
   pi <- t(t(X) / colSums(X))
@@ -109,8 +120,7 @@ simulate.data <- function(m, n, gamma, mu, beta0 = NULL, sigma2 = NULL, eta0 = N
   } else if (model == 'S4') {
     N <- rnbinom(n, size = 5.3, mu = 1500)
     Y <- sapply(1 : n, function(s)rmultinom(1, N[s], pi[, s]))
-  }
-  else if (model == 'S6') {
+  } else if (model == 'S6') {
     N <- rep(NA, n)
     ind <- which(u == 0)
     N[ind] <- rnbinom(length(ind), size = 5.3, mu = 5000)

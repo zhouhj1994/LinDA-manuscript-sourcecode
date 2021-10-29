@@ -29,7 +29,7 @@ fdr.fun <- function(input1, input2, compr.methods){
     facet_grid(factor(sig.density, labels = c("Sparse Signal", "Dense Signal"))
                ~factor(sample.size, labels = c("n = 50", "n = 200"))) +
     xlab("Signal Strength") +
-    ylab("False Discovery Proportion") +
+    ylab("Empirical False Discovery Rate") +
     geom_hline(aes(yintercept = 0.05), color = "black", linetype = "dashed") +
     theme_bw(base_size = 18) +
     ggtitle('A') +
@@ -106,6 +106,29 @@ fun <- function(setup) {
   dev.off()
 }
 
+fun <- function(setup) {
+  n.met <- ncol(output)/4
+  fdr <- output[, 1 : n.met][, ind]
+  power <- output[, (n.met+1) : (2*n.met)][, ind]
+  fdr.sd <- output[, (2*n.met+1) : (3*n.met)][, ind]
+  power.sd <- output[, (3*n.met+1) : (4*n.met)][, ind]
+  
+  fdr.sd.1 <- fdr.sd * 1.96 
+  fdr.sd.1[, 1 : ncol(fdr)] <- NA
+  power.sd.1 <- power.sd * 1.96 
+  power.sd.1[, 1 : ncol(fdr)] <- NA
+  
+  # power.fun(power, power.sd.1, compr.methods)
+  # fdr.fun(fdr, fdr.sd.1, compr.methods)
+  
+  # pdf(file = paste0(setup, "_power.pdf"), width = 11, height = 8)
+  # print(power.fun(power, power.sd.1, compr.methods))
+  # dev.off()
+  pdf(file = paste0(setup, "_fdr_new.pdf"), width = 11, height = 8)
+  print(fdr.fun(fdr, fdr.sd.1, compr.methods))
+  dev.off()
+}
+
 compr.methods <- c("DESeq2", "EdgeR", "MetagenomeSeq-2")
 ind <- c(5, 6, 8)
 output <- read.table("output_S0C0.txt")
@@ -132,4 +155,86 @@ fun('S71C0')
 output <- read.table("output_S7.2C0.txt")
 fun('S72C0')
 
+############ Add
+compr.methods <- c('LinDA', 'CLR+OLS', 'Maas-TSS', 'Maas-TMM', 'Maas-CSS', 'Maas-CLR')
+compr.methods <- factor(compr.methods, levels = compr.methods)
+ind <- 1 : 6
+output <- read.table("output_S0C0_Maaslin2LinDA_1.txt")
+fun('S0C0Maaslin2LinDA')
 
+compr.methods <- c('LinDA', 'ANCOM-BC', 'ALDEx2', 'MetagenomeSeq', 'Wilcoxon',
+                   "DESeq2", "EdgeR", "MetagenomeSeq-2", 'Maaslin2')
+compr.methods <- factor(compr.methods, levels = compr.methods)
+ind <- c(1, 2, 4, 7, 9, 5, 6, 8, 11)
+output <- read.table("output_NegBinomC0_ALL.txt")
+fun('NegBinomC0All')
+
+############
+fun <- function(setup) {
+  
+  n.met <- ncol(output1)/4
+  fdr <- cbind(output1[, 1 : n.met][, ind], output2[,2])
+  power <- cbind(output1[, (n.met+1) : (2*n.met)][, ind], output2[,4])
+  fdr.sd <- cbind(output1[, (2*n.met+1) : (3*n.met)][, ind], output2[,6])
+  power.sd <- cbind(output1[, (3*n.met+1) : (4*n.met)][, ind], output2[,8])
+  
+  fdr.sd.1 <- fdr.sd * 1.96 
+  fdr.sd.1[, 1 : ncol(fdr)] <- NA
+  power.sd.1 <- power.sd * 1.96 
+  power.sd.1[, 1 : ncol(fdr)] <- NA
+  
+  # power.fun(power, power.sd.1, compr.methods)
+  # fdr.fun(fdr, fdr.sd.1, compr.methods)
+  
+  pdf(file = paste0(setup, "_power.pdf"), width = 11, height = 8)
+  print(power.fun(power, power.sd.1, compr.methods))
+  dev.off()
+  pdf(file = paste0(setup, "_fdr.pdf"), width = 11, height = 8)
+  print(fdr.fun(fdr, fdr.sd.1, compr.methods))
+  dev.off()
+}
+
+compr.methods <- c('LinDA', 'ANCOM-BC', 'ALDEx2', 'MetagenomeSeq', 'Wilcoxon',
+                   "DESeq2", "EdgeR", "MetagenomeSeq-2", 'Maaslin2')
+compr.methods <- factor(compr.methods, levels = compr.methods)
+ind <- c(1, 2, 4, 7, 9, 5, 6, 8)
+output1 <- read.table("output_S0C0.txt")
+output2 <- read.table("output_S0C0_Maaslin2LinDA_1.txt")[, c(1, 3, c(1, 3) + 6,
+                                                             c(1, 3) + 12, c(1, 3) + 18)]
+fun('S0C0All')
+
+output1 <- read.table("output_S0C1.txt")
+output2 <- read.table("output_S0C1_Maaslin2LinDA.txt")
+fun('S0C1All')
+
+output1 <- read.table("output_S0C2.txt")
+output2 <- read.table("output_S0C2_Maaslin2LinDA.txt")
+fun('S0C2All')
+
+output1 <- read.table("output_S1C0.txt")
+output2 <- read.table("output_S1C0_Maaslin2LinDA.txt")
+fun('S1C0All')
+
+output1 <- read.table("output_S2C0.txt")
+output2 <- read.table("output_S2C0_Maaslin2LinDA.txt")
+fun('S2C0All')
+
+output1 <- read.table("output_S3C0.txt")
+output2 <- read.table("output_S3C0_Maaslin2LinDA.txt")
+fun('S3C0All')
+
+output1 <- read.table("output_S4C0.txt")
+output2 <- read.table("output_S4C0_Maaslin2LinDA.txt")
+fun('S4C0All')
+
+output1 <- read.table("output_S5C0.txt")
+output2 <- read.table("output_S5C0_Maaslin2LinDA.txt")
+fun('S5C0All')
+
+output1 <- read.table("output_S6C0.txt")
+output2 <- read.table("output_S6C0_Maaslin2LinDA.txt")
+fun('S6C0All')
+
+output1 <- read.table("output_S0C0Strong.txt")
+output2 <- read.table("output_S0C0Strong_Maaslin2LinDA.txt")
+fun('S0C0StrongAll')

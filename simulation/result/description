@@ -1,11 +1,37 @@
-1. There are 10 columns in output_S0C0.txt (and other txt files with 10 columns)representing methods:
+1. There are 10 * 4 columns in output_S0C0.txt (and other txt files with 10 * 4 columns)representing methods:
 
-LinDA, ANCOM-BC (disabling zero treatment), ANCOM-BC-2 (enabling zero treatment), ALDEx2, DESeq2, EdgeR, MetagenomeSeq, MetagenomeSeq-2, Wilcoxon-Spearman (GMPR normalization), Wilcoxon-Spearman-2 (relative abundance).
+LinDA, ANCOM-BC (disabling zero treatment), ANCOM-BC-2 (enabling zero treatment), ALDEx2, DESeq2 (GMPR normalization), EdgeR (GMPR normalization), MetagenomeSeq, MetagenomeSeq-2, Wilcoxon-Spearman (GMPR normalization), Wilcoxon-Spearman-2 (relative abundance).
 
-2. There are 3 columns in output_S0C0LinDA.txt and output_S6C0LinDA.txt representing LinDA method with different zero handling approaches:
+fwer * 10 + power * 10 + fwer.sd * 10 + power.sd * 10
+
+2. There are 3 * 4 columns in output_S0C0LinDA.txt and output_S6C0LinDA.txt representing LinDA method with different zero handling approaches:
 
 Adaptive, Pseudo-count, imputation.
 
-3. There are 4 columns in output_S71C0.txt and output_S72C0.txt representing:
+3. There are 4 * 4 columns in output_S71C0.txt and output_S72C0.txt representing:
 
 LinDA-OLS, CLR+OLS, LinDA-LMM, CLR+LMM.
+
+Above results are obtained using the old LinDA package, where the association between sequencing depth and the variable of interest is tested using the spearman correlation test / wilcoxon test / kruskal Wallis test
+----------------------------------------
+
+4. There are 6 * 4 columns in output_S0C0_Maaslin2LinDA_1.txt representing methods:
+
+LinDA, OLS, Maaslin2-TSS-LOG, Maaslin2-TMM-LOG, Maaslin2-CSS-LOG, Maaslin2-CLR-NONE
+
+5. There are 11 * 4 columns in output_NegBinomC0_ALL.txt representing methods:
+
+10 methods in "1", Maaslin2 (default setting, i.e., TSS-LOG)
+
+6. output_S0C0LinDAnew.txt and output_S6C0LinDAnew.txt are same as "2"
+
+7. There are 2 * 4 columns in output_S0C1_Maaslin2LinDA.txt (and other txt files with 2 * 4 columns) representing methods:
+
+Linda, Maaslin2 (default setting, i.e., TSS-LOG)
+
+Above results are obtained using the new LinDA package, where the association between sequencing depth and explanatory variables are tested using the linear regression between log(N) and  explanatory variables
+-----------------------------------------
+
+The results using the old LinDA and the new LinDA are very close to each other, no difference in the figure. The slight differences come from different decisions sometimes on using imputation or pseudo-count.
+
+
