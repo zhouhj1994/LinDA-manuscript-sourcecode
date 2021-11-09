@@ -239,3 +239,122 @@ tax.df <- as.data.frame(smokers$tax)
 fam <- tax.df[, 'Family']
 names(fam) <- rownames(tax.df)
 
+################################################################## Add
+library(LinDA)
+library(ggplot2)
+
+data.list <- readRDS("~/Documents/diff_abundance_analysis/LinDA-manuscript/LinDA-result/realdata/data/CDI_IBD_RA_SMOKE.rds")
+pval.mat.list <- readRDS("~/Documents/diff_abundance_analysis/LinDA-manuscript/LinDA-result/realdata/code_result/pval.mat.list.rds")
+
+winsor.fun <- function(Y, quan) {
+  N <- colSums(Y)
+  P <- t(t(Y) / N)
+  cut <- apply(P, 1, quantile, quan)
+  Cut <- matrix(rep(cut, ncol(Y)), nrow(Y))
+  ind <- P > Cut
+  P[ind] <- Cut[ind]
+  Y <- round(t(t(P) * N))
+  return(Y)
+}
+
+preprocess.fun <- function(otu.tab, meta, prev.cut = 0.1, lib.cut = 1000, 
+                           winsor.quan = 0.97) {
+  keep.sam <- colSums(otu.tab) >= lib.cut
+  Y <- otu.tab[, keep.sam]
+  Z <- as.data.frame(meta[keep.sam, ])
+  names(Z) <- names(meta)
+  rownames(Z) <- rownames(meta)[keep.sam]
+  keep.tax <- rowSums(Y > 0) / ncol(Y) >= prev.cut
+  Y <- Y[keep.tax, ]
+  Y <- winsor.fun(Y, winsor.quan) 
+  
+  return(list(Y = Y, Z = Z, keep.sam = keep.sam, keep.tax = keep.tax))
+}
+
+formulas <- c('~Disease', '~Disease+Antibiotic', '~Disease', '~Smoke+Sex+(1|SubjectID)')
+files <- c('plot_lfc_CDI_new.pdf', 'plot_lfc_IBD_new.pdf', 
+           'plot_lfc_RA_new.pdf', 'plot_lfc_SMOKE_new.pdf')
+ind.list <- list(c(1, 2, 3, 6, 8), c(1, 2, 3, 8), c(1, 2, 3, 6, 8), c(1, 2, 3))
+met.list <- list(c('LinDA', 'ANCOM-BC', 'ALDEx2', 'MetagenomeSeq', 'Wilcoxon'),
+                 c('LinDA', 'ANCOM-BC', 'ALDEx2', 'Wilcoxon'),
+                 c('LinDA', 'ANCOM-BC', 'ALDEx2', 'MetagenomeSeq', 'Wilcoxon'),
+                 c('LinDA-LMM(Both)', 'LinDA-OLS(Left)', 'LinDA-OLS(Right)'))
+titles <- c('Disease: Case v.s. DiarrhealControl', 'Disease: Crohn\'s disease v.s. Healthy',
+            'Disease: HLT v.s. NORA', 'Smoke: n v.s. y')
+cutoff <- 0.1
+
+lfc.fun <- function(i) {
+  otu.tab <- data.list[[2*(i-1)+1]]
+  meta <- data.list[[2*i]]
+  res <- preprocess.fun(otu.tab, meta)
+  Y <- res$Y
+  Z <- res$Z
+  
+  pval.mat <- pval.mat.list[[i]][, ind.list[[i]]]
+  n.met <- ncol(pval.mat)
+  qval.mat <- sapply(1 : n.met, function(i) 
+    p.adjust(pval.mat[, i], method = 'BH'))
+  
+  linda.obj <- linda(Y, Z, formulas[i], adaptive = FALSE, imputation = FALSE)
+  
+  otu.tab <- linda.obj$otu.tab.use
+  taxa <- rownames(otu.tab)
+  bias <- linda.obj$bias
+  output <- linda.obj$output
+  output.i <- output[[1]]
+  bias.i <- bias[1]
+  lfc <- output.i$log2FoldChange
+  lfcSE <- output.i$lfcSE
+  
+  if(i %in% c(1, 2, 3)) {
+    ind.rej.linda <- which(qval.mat[, 1] <= cutoff)
+    ind.rej.linda.only <- which(qval.mat[, 1] <= cutoff & 
+                                  rowSums(qval.mat[,2:n.met] <= cutoff, na.rm = TRUE) == 0)
+    if(i == 1) {
+      ind.rej.other.only <- NULL
+    } else if (i == 2 | i == 3) {
+      ind.rej.other.only <- which(qval.mat[, 1] > cutoff & qval.mat[, 2] <= cutoff &
+                                    qval.mat[, 4] <= cutoff)
+    } 
+    ind.rej <- c(ind.rej.linda, ind.rej.other.only)
+    rej.color <- c(rep('black', length(ind.rej.linda)), 
+                   rep('blue', length(ind.rej.other.only)))
+    rej.color[which(ind.rej %in% ind.rej.linda.only)] <- 'red'
+  } else if (i == 4) {
+    ind.rej <- which(qval.mat[, 1] <= cutoff)
+    rej.color <- rep('black', length(ind.rej))
+  }
+  
+  if(i == 3) {
+    height <- 11
+    width <- 15
+  } else {
+    height <- 8
+    width <- 11
+  }
+  
+  n.rej <- length(ind.rej)
+  taxa.rej <- taxa[ind.rej]
+  taxa.rej <- factor(taxa.rej, levels = taxa.rej)
+  data.plot.lfc <- cbind.data.frame(Taxa = rep(taxa.rej, 2),
+                                    Log2FoldChange = c(lfc[ind.rej], lfc[ind.rej] + bias.i),
+                                    lfcSE = c(lfcSE[ind.rej], rep(NA, n.rej)),
+                                    bias = rep(c('Debiased', 'Non-debiased'), each = n.rej))
+  pdf(files[i], width = width, height = height)
+  plot.lfc.i <- ggplot(data.plot.lfc, aes(x = Log2FoldChange, y = Taxa)) +
+    geom_point(aes(color = bias, shape = bias), size = 3) +
+    geom_errorbar(aes(xmin = Log2FoldChange - 1.96 * lfcSE,
+                      xmax = Log2FoldChange + 1.96 * lfcSE), width = .2) +
+    geom_vline(xintercept = 0, color = 'gray', linetype = 'dashed') +
+    ggtitle(titles[i]) +
+    theme_bw(base_size = 18) +
+    theme(axis.text.y = element_text(colour = rej.color, size = 8),
+          legend.title = element_blank(),
+          legend.key.width = unit(1, 'cm'), plot.margin = unit(c(1, 1, 1, 1.5), 'cm'))
+  print(plot.lfc.i)
+  dev.off()
+}
+lfc.fun(1)
+lfc.fun(2)
+lfc.fun(3)
+lfc.fun(4)
