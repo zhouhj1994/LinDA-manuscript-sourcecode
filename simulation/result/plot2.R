@@ -135,17 +135,17 @@ fun <- function(setup) {
   # fdr.fun(fdr, fdr.sd.1, compr.methods, 
   #         color.manual, linetype.manual, shape.manual, sample.size.label)
   
-  # pdf(file = paste0(setup, "_power.pdf"), width = 11, height = 8)
-  # print(power.fun(power, power.sd.1, compr.methods, 
-  #                 color.manual, linetype.manual, shape.manual, sample.size.label))
-  # dev.off()
+  pdf(file = paste0(setup, "_power_new.pdf"), width = 11, height = 8)
+  print(power.fun(power, power.sd.1, compr.methods, 
+                   color.manual, linetype.manual, shape.manual, sample.size.label))
+  dev.off()
   pdf(file = paste0(setup, "_fdr_new.pdf"), width = 11, height = 8)
   print(fdr.fun(fdr, fdr.sd.1, compr.methods, 
                 color.manual, linetype.manual, shape.manual, sample.size.label))
   dev.off()
 }
 
-compr.methods <- c('LinDA', 'ANCOM-BC', 'ALDEx2', 'MetagenomeSeq', 'Wilcoxon')
+compr.methods <- c('LinDA', 'ANCOM-BC', 'ALDEx2', 'metagenomeSeq', 'Wilcoxon')
 color.manual <- c("red","#006600","#0099CC","#FF9966", "#663399")
 linetype.manual <- c("solid", "dashed", "dotted", "dotdash", "longdash")
 shape.manual <- c(16, 17, 15, 3, 7)

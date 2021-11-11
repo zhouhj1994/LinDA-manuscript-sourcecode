@@ -21,7 +21,7 @@ num.rej3 <- num.rej.fun(pval.mat.list[[3]][, ind], curve.fdr.cutoffs)
 cutoff <- rep(curve.fdr.cutoffs, 5 * 3)
 n.cut <- length(curve.fdr.cutoffs)
 method <- factor(1 : 5, labels = c('LinDA', 'ANCOM-BC', 
-                                   'ALDEx2', 'MetagenomeSeq', 'Wilcoxon'))
+                                   'ALDEx2', 'metagenomeSeq', 'Wilcoxon'))
 Method <- rep(rep(method, each = n.cut), 3)
 dataset <- c(rep('CDI', n.cut * 5), rep('IBD', n.cut * 5), rep('RA', n.cut * 5))
 value <- c(as.vector(num.rej1), as.vector(num.rej2), as.vector(num.rej3))
@@ -39,7 +39,7 @@ plot1 <- ggplot(data.plot, aes(x = cutoff, y = value, group = Method)) +
   facet_wrap(~dataset, ncol = 3, scales = 'free') +
   theme(legend.key.width = unit(1, "cm"),
         plot.margin=unit(c(1, 1, 1, 1.5),"cm"))
-pdf('num_rej_curve.pdf', width = 22, height = 8)
+pdf('num_rej_curve_new.pdf', width = 22, height = 8)
 print(plot1)
 dev.off()
 
@@ -201,12 +201,13 @@ fun <- function(pval.mat) {
   }
   pdf(paste0('upset_', filename, '.pdf'), height = 8, width = 11)
   upset(upset.df, nsets = n.met, mb.ratio = c(0.5, 0.5), sets.x.label = 'Number of Discoveries',
-        order.by = c("freq", "degree"), decreasing = c(TRUE,FALSE), queries = queries)
+        order.by = c("freq", "degree"), decreasing = c(TRUE,FALSE), queries = queries,
+        point.size = 3, text.scale = c(2, 2, 2, 2, 2, 2))
   dev.off()
 }
 
 cutoff <- 0.1
-method <- c('LinDA', 'ANCOM-BC', 'ALDEx2', 'MetagenomeSeq', 'Wilcoxon')
+method <- c('LinDA', 'ANCOM-BC', 'ALDEx2', 'metagenomeSeq', 'Wilcoxon')
 ind <- c(1, 2, 3, 6, 8)
 filename <- 'CDI'
 pval.mat <- pval.mat.list[[1]][, ind]

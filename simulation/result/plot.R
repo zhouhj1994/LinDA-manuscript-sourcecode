@@ -121,15 +121,15 @@ fun <- function(setup) {
   # power.fun(power, power.sd.1, compr.methods)
   # fdr.fun(fdr, fdr.sd.1, compr.methods)
   
-  # pdf(file = paste0(setup, "_power.pdf"), width = 11, height = 8)
-  # print(power.fun(power, power.sd.1, compr.methods))
-  # dev.off()
+  pdf(file = paste0(setup, "_power_new.pdf"), width = 11, height = 8)
+  print(power.fun(power, power.sd.1, compr.methods))
+  dev.off()
   pdf(file = paste0(setup, "_fdr_new.pdf"), width = 11, height = 8)
   print(fdr.fun(fdr, fdr.sd.1, compr.methods))
   dev.off()
 }
 
-compr.methods <- c("DESeq2", "EdgeR", "MetagenomeSeq-2")
+compr.methods <- c("DESeq2", "edgeR", "metagenomeSeq-2")
 ind <- c(5, 6, 8)
 output <- read.table("output_S0C0.txt")
 fun('S0C0others')
@@ -156,14 +156,14 @@ output <- read.table("output_S7.2C0.txt")
 fun('S72C0')
 
 ############ Add
-compr.methods <- c('LinDA', 'CLR+OLS', 'Maas-TSS', 'Maas-TMM', 'Maas-CSS', 'Maas-CLR')
+compr.methods <- c('LinDA', 'CLR+OLS', 'MaAsLin2-TSS', 'MaAsLin2-TMM', 'MaAsLin2-CSS', 'MaAsLin2-CLR')
 compr.methods <- factor(compr.methods, levels = compr.methods)
 ind <- 1 : 6
 output <- read.table("output_S0C0_Maaslin2LinDA_1.txt")
 fun('S0C0Maaslin2LinDA')
 
-compr.methods <- c('LinDA', 'ANCOM-BC', 'ALDEx2', 'MetagenomeSeq', 'Wilcoxon',
-                   "DESeq2", "EdgeR", "MetagenomeSeq-2", 'Maaslin2')
+compr.methods <- c('LinDA', 'ANCOM-BC', 'ALDEx2', 'metagenomeSeq', 'Wilcoxon',
+                   "DESeq2", "edgeR", "metagenomeSeq-2", 'MaAsLin2')
 compr.methods <- factor(compr.methods, levels = compr.methods)
 ind <- c(1, 2, 4, 7, 9, 5, 6, 8, 11)
 output <- read.table("output_NegBinomC0_ALL.txt")
@@ -194,8 +194,8 @@ fun <- function(setup) {
   dev.off()
 }
 
-compr.methods <- c('LinDA', 'ANCOM-BC', 'ALDEx2', 'MetagenomeSeq', 'Wilcoxon',
-                   "DESeq2", "EdgeR", "MetagenomeSeq-2", 'Maaslin2')
+compr.methods <- c('LinDA', 'ANCOM-BC', 'ALDEx2', 'metagenomeSeq', 'Wilcoxon',
+                   "DESeq2", "edgeR", "metagenomeSeq-2", 'MaAsLin2')
 compr.methods <- factor(compr.methods, levels = compr.methods)
 ind <- c(1, 2, 4, 7, 9, 5, 6, 8)
 output1 <- read.table("output_S0C0.txt")
