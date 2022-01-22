@@ -1,6 +1,6 @@
 source('competing_methods.R')
 
-data.list <- readRDS("/Users/zhouhuijuan/Documents/diff_abundance_analysis/DAA20210315/LinDA/realdata/data/CDI_IBD_RA_SMOKE.rds")
+data.list <- readRDS("~/Documents/diff_abundance_analysis/LinDA-manuscript/LinDA-result/realdata/data/CDI_IBD_RA_SMOKE.rds")
 
 winsor.fun <- function(Y, quan) {
   N <- colSums(Y)
@@ -102,3 +102,41 @@ saveRDS(pval.mat.list, 'pval.mat.list.rds')
 # sum(q2 <= 0.1)
 # q3 <- p.adjust(p3, method = 'BH')
 # sum(q3 <= 0.1)
+
+pval.mat.list <- readRDS('pval.mat.list.rds')
+fix.effs <- list('Disease', c('Disease','Antibiotic'), 'Disease')
+
+for(i in 1 : 3) {
+  otu.tab <- data.list[[2*(i-1)+1]]
+  meta <- data.list[[2*i]]
+  res <- preprocess.fun(otu.tab, meta)
+  Y <- res$Y
+  Z <- res$Z
+  rownames(Y) <- paste0('taxon',rownames(Y))
+  
+  fix.eff <- fix.effs[[i]]
+  pval <- maaslin2.fun(Y, Z, fix.eff, NULL)
+  pmat <- pval.mat.list[[i]]
+  pmat <- cbind(pmat, pval)
+  colnames(pmat)[9] <- 'Maaslin2'
+  pval.mat.list[[i]] <- pmat
+}
+
+i <- 4
+otu.tab <- data.list[[2*(i-1)+1]]
+meta <- data.list[[2*i]]
+res <- preprocess.fun(otu.tab, meta)
+Y <- res$Y
+Z <- res$Z
+rownames(Y) <- paste0('taxon',rownames(Y))
+
+pval1 <- maaslin2.fun(Y, Z, c('Smoke','Sex'), 'SubjectID')
+ind <- which(Z$Site == 'Left')
+pval2 <- maaslin2.fun(Y[, ind], Z[ind, ], c('Smoke','Sex'), NULL)
+ind <- which(Z$Site == 'Right')
+pval3 <- maaslin2.fun(Y[, ind], Z[ind, ], c('Smoke','Sex'), NULL)
+pmat <- pval.mat.list[[4]]
+pmat <- cbind(pmat,pval1,pval2,pval3)
+colnames(pmat)[4:6] <- c('Maaslin2(Both)', 'Maaslin2(Left)', 'Maaslin2(Right)')
+pval.mat.list[[i]] <- pmat
+saveRDS(pval.mat.list, 'pval.mat.list.rds')
