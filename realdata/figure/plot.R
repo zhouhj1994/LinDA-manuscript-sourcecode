@@ -35,7 +35,7 @@ plot1 <- ggplot(data.plot, aes(x = cutoff, y = value, group = Method)) +
   scale_shape_manual(values = c(16, 17, 15, 3, 8, 7)) + 
   xlab('Target FDR Level') +
   ylab('Number of Discoveries') +
-  theme_bw(base_size = 18) +
+  theme_bw(base_size = 30) +
   facet_wrap(~dataset, ncol = 3, scales = 'free') +
   theme(legend.key.width = unit(1, "cm"),
         plot.margin=unit(c(1, 1, 1, 1.5),"cm"))
@@ -66,7 +66,7 @@ fun <- function(pval.mat) {
   } else {
     queries = NULL
   }
-  pdf(paste0('upset_', filename, '.pdf'), height = 8, width = 11)
+  pdf(paste0('upset_', filename, '.pdf'), height = 8, width = 16)
   upset(upset.df, nsets = n.met, mb.ratio = c(0.5, 0.5), sets.x.label = 'Number of Discoveries',
         order.by = c("freq", "degree"), decreasing = c(TRUE,FALSE), queries = queries,
         point.size = 3, text.scale = c(2, 2, 2, 2, 2, 2))
